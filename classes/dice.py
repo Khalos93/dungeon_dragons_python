@@ -5,23 +5,22 @@ logger = logging.getLogger(__name__)
 
 
 class Dice:
+    faces_allowed = [4, 6, 8, 10, 12, 20, 100]
 
-    def __init__(self, _faces: int) -> None:
+    def __init__(self, faces: int) -> None:
 
-        faces_allowed = [4, 6, 8, 10, 12, 20, 100]
+        if isinstance(faces, bool) or not isinstance(faces, int):
+            raise TypeError(f"Number of faces must be an integer, got {type(faces).__name__}")
 
-        if isinstance(_faces, bool) or not isinstance(_faces, int):
-            raise TypeError(f"Number of faces must be an integer, got {type(_faces).__name__}")
-
-        if _faces not in faces_allowed :
+        if faces not in self.faces_allowed:
             raise ValueError("A dice must have have one of those 4, 6, 8, 10, 12, 20, 100 faces")
 
-        self.faces = _faces
-        logger.debug("Dice created with %s faces", self.faces)
+        self._faces = faces
+        logger.debug("Dice created with %s faces", self._faces)
 
     def roll(self) -> int:
-        result = random.randint(1, self.faces)
-        logger.debug("Dice roll: faces=%s result=%s", self.faces, result)
+        result = random.randint(1, self._faces)
+        logger.debug("Dice roll: faces=%s result=%s", self._faces, result)
         return result
 
     def roll_with_advantage(self) -> int:
