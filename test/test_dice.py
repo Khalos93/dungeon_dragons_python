@@ -11,20 +11,6 @@ def test_dice_rejects_non_integer_parameters(invalid_input):
         Dice(invalid_input)
 
 
-# def test_dice_invalid_type():
-#     # Test string input
-#     with pytest.raises(TypeError, match="Number of faces must be an integer"):
-#         Dice("six")
-#
-#     # Test boolean input
-#     with pytest.raises(TypeError, match="Number of faces must be an integer"):
-#         Dice(True)
-#
-#     # Test float input
-#     with pytest.raises(TypeError, match="Number of faces must be an integer"):
-#         Dice(3.5)
-
-
 INVALID_DND_DICE = [0, 1, -5, 2, 3, 5, 15, 33, 70, 80, 89, 95]
 
 
@@ -63,18 +49,20 @@ def test_roll_with_disadvantage(mocker):
     assert mock_randint.call_count == 2
     assert mock_randint.call_args_list == [call(1, 6), call(1, 6)]
 
+
 def test_a_dice_can_be_rolled_multiple_times(mocker):
     # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", side_effect=[4, 6, 2])
     dice = Dice(6)
     total, rolls = dice.roll(times=3)
     assert total == 12
-    assert rolls == [4,6,2]
+    assert rolls == [4, 6, 2]
     assert mock_randint.call_count == 3
 
+
 @pytest.mark.parametrize("mocked_roll,modifier,result", [
-    [2,4,6],
-    [4,6,10],
+    [2, 4, 6],
+    [4, 6, 10],
     [2, -1, 1],
     [3, -5, 1]
 ])
