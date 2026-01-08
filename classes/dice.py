@@ -36,6 +36,8 @@ class Dice:
             logger.debug("Dice roll: faces=%s result=%s modifier=%s", self._faces, roll, modifier)
 
         total = sum(rolls) + modifier
+        if total < 1:
+            total = 1
         return total, rolls
 
     def roll_with_advantage(self) -> int:
