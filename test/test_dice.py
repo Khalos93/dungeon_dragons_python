@@ -72,5 +72,4 @@ def test_a_dice_with_modifier(mocked_roll, modifier, result, mocker):
     dice = Dice(6)
     total, _ = dice.roll(modifier=modifier)
     assert total == result
-
     assert mock_randint.call_count == 1
