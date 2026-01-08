@@ -18,25 +18,25 @@ class Dice:
         self._faces = faces
         logger.debug("Dice created with %s faces", self._faces)
 
-    def roll(self, times=1, modifier=0) -> list[int]:
-        if isinstance(times, bool) or not isinstance(times, int):
-            raise TypeError(f"Number of times must be an integer, got {type(times).__name__}")
+    def _validate_int(self, value, name):
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise TypeError(f"{name} must be an integer, got {type(value).__name__}")
+
+    def roll(self, times: int = 1, modifier: int = 0) -> tuple[int, list[int]]:
+        self._validate_int(times, "Number of times")
+        self._validate_int(modifier, "Modifier")
+
         if times < 1:
             raise ValueError(f"Number of times must be a positive number, got {times}")
 
-        if isinstance(modifier, bool) or not isinstance(modifier, int):
-            raise TypeError(f"Number of modifier must be an integer, got {type(modifier).__name__}")
         rolls = []
         for _ in range(times):
             roll = random.randint(1, self._faces)
             rolls.append(roll)
-            logger.debug("Dice roll: faces=%s result=%s", self._faces, roll)
+            logger.debug("Dice roll: faces=%s result=%s modifier=%s", self._faces, roll, modifier)
 
         total = sum(rolls) + modifier
-        result = [total, rolls]
-        return result
-
-
+        return total, rolls
 
     def roll_with_advantage(self) -> int:
         first = self.roll()
@@ -47,4 +47,3 @@ class Dice:
         first = self.roll()
         second = self.roll()
         return min(first, second)
-
