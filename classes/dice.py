@@ -41,19 +41,19 @@ class Dice:
         return total, rolls
 
     def roll_with_advantage(self) -> tuple[int, list[int]]:
-        first = self.roll()
-        second = self.roll()
-        if first[0] > second[0]:
-            return first[0], first[1]
+        first, first_rolls = self.roll()
+        second, second_rolls = self.roll()
+        if first > second:
+            return first, first_rolls
         else:
-            return second[0], second[1]
+            return second, second_rolls
 
     def roll_with_disadvantage(self) -> tuple[int, list[int]]:
-        first = self.roll()
-        second = self.roll()
-        if first[0] < second[0]:
-            return first[0], first[1]
+        first, first_rolls = self.roll()
+        second, second_rolls = self.roll()
+        if first < second:
+            return first, first_rolls
         else:
-            return second[0], second[1]
+            return second, second_rolls
 
 
