@@ -40,12 +40,20 @@ class Dice:
             total = 1
         return total, rolls
 
-    def roll_with_advantage(self) -> int:
+    def roll_with_advantage(self) -> tuple[int, list[int]]:
         first = self.roll()
         second = self.roll()
-        return max(first, second)
+        if first[0] > second[0]:
+            return first[0], first[1]
+        else:
+            return second[0], second[1]
 
-    def roll_with_disadvantage(self) -> int:
+    def roll_with_disadvantage(self) -> tuple[int, list[int]]:
         first = self.roll()
         second = self.roll()
-        return min(first, second)
+        if first[0] < second[0]:
+            return first[0], first[1]
+        else:
+            return second[0], second[1]
+
+
