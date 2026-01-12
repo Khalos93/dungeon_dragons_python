@@ -18,7 +18,8 @@ class Dice:
         self._faces = faces
         logger.debug("Dice created with %s faces", self._faces)
 
-    def _validate_int(self, value, name):
+    @staticmethod
+    def _validate_int(value, name):
         if isinstance(value, bool) or not isinstance(value, int):
             raise TypeError(f"{name} must be an integer, got {type(value).__name__}")
 
@@ -56,4 +57,44 @@ class Dice:
         else:
             return second, second_rolls
 
+    def best_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
+        self._validate_int(rolls, "number of times")
+        self._validate_int(modifier, "value of modifier")
+        results = []
+        for _ in range(rolls):
+            roll = random.randint(1, self._faces)
+            logger.debug("Best-of roll: faces=%s result=%s", self._faces, roll)
+            results.append(roll)
 
+        higher_roll = max(results) + modifier
+        if higher_roll < 1:
+            higher_roll = 1
+
+        logger.debug(
+            "Best-of result: rolls=%s modifier=%s final=%s",
+            results,
+            modifier,
+            higher_roll,
+        )
+        return higher_roll, results
+
+    def worst_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
+        self._validate_int(rolls, "Number of times")
+        self._validate_int(modifier, "Modifier")
+        results = []
+        for _ in range(rolls):
+            roll = random.randint(1, self._faces)
+            logger.debug("Worst-of roll: faces=%s result=%s", self._faces, roll)
+            results.append(roll)
+
+        lower_roll = min(results) + modifier
+        if lower_roll < 1:
+            lower_roll = 1
+
+        logger.debug(
+            "Worst-of result: rolls=%s modifier=%s final=%s",
+            results,
+            modifier,
+            lower_roll,
+        )
+        return lower_roll, results
