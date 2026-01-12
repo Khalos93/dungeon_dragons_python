@@ -67,7 +67,6 @@ def test_a_dice_can_be_rolled_multiple_times(mocker):
     [3, -5, 1]
 ])
 def test_a_dice_with_modifier(mocked_roll, modifier, result, mocker):
-    # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", return_value=mocked_roll)
     dice = Dice(6)
     total, _ = dice.roll(modifier=modifier)
@@ -75,33 +74,33 @@ def test_a_dice_with_modifier(mocked_roll, modifier, result, mocker):
     assert mock_randint.call_count == 1
 
 
-@pytest.mark.parametrize("mocked_rolls,rolls,modifier,result", [
+@pytest.mark.parametrize("mocked_rolls,roll_times,modifier,result", [
     [[2, 4, 18], 3, 0, 18],
     [[1, 20, 11, 8, 7], 5, 0, 20],
     [[14, 13, 6], 3, 1, 15],
     [[2, 4, 18], 3, -1, 17]
 ])
-def test_a_dice_should_be_rolled_n_times_and_the_best_roll_should_be_picked(mocked_rolls, rolls, modifier, result,
+def test_a_dice_should_be_rolled_n_times_and_the_best_roll_should_be_picked(mocked_rolls, roll_times, modifier, result,
                                                                             mocker):
-    # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", side_effect=mocked_rolls)
     dice = Dice(20)
-    higher_roll, rolls = dice.best_of(rolls=rolls, modifier=modifier)
+    higher_roll, rolls = dice.best_of(rolls=roll_times, modifier=modifier)
     assert higher_roll == result
     assert rolls == mocked_rolls
+    assert mock_randint.call_count == roll_times
 
 
-@pytest.mark.parametrize("mocked_rolls,rolls,modifier,result", [
+@pytest.mark.parametrize("mocked_rolls,roll_times,modifier,result", [
     [[2, 4, 18], 3, 0, 2],
     [[1, 20, 11, 16, 2], 5, 0, 1],
     [[14, 13, 6], 3, 1, 7],
     [[14, 13, 6], 3, -1, 5],
 ])
-def test_a_dice_should_be_rolled_n_times_and_the_worst_roll_should_be_picked(mocked_rolls, rolls, modifier, result,
+def test_a_dice_should_be_rolled_n_times_and_the_worst_roll_should_be_picked(mocked_rolls, roll_times, modifier, result,
                                                                              mocker):
-    # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", side_effect=mocked_rolls)
     dice = Dice(20)
-    higher_roll, rolls = dice.worst_of(rolls=rolls, modifier=modifier)
+    higher_roll, rolls = dice.worst_of(rolls=roll_times, modifier=modifier)
     assert higher_roll == result
     assert rolls == mocked_rolls
+    assert mock_randint.call_count == roll_times
