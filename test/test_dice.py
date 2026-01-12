@@ -21,7 +21,6 @@ def test_dice_rejects_non_standard_dnd_dice(invalid_faces):
 
 
 def test_roll(mocker):
-    # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", return_value=4)
     dice = Dice(6)
     result, _ = dice.roll()
@@ -31,7 +30,6 @@ def test_roll(mocker):
 
 
 def test_roll_with_advantage(mocker):
-    # Mock random.randint to return 2 first, then 5
     mock_randint = mocker.patch("random.randint", side_effect=[2, 5])
     dice = Dice(6)
     result, _ = dice.roll_with_advantage()
@@ -41,7 +39,6 @@ def test_roll_with_advantage(mocker):
 
 
 def test_roll_with_disadvantage(mocker):
-    # Mock random.randint to return 6 first, then 1
     mock_randint = mocker.patch("random.randint", side_effect=[6, 1])
     dice = Dice(6)
     result, _ = dice.roll_with_disadvantage()
@@ -51,7 +48,6 @@ def test_roll_with_disadvantage(mocker):
 
 
 def test_a_dice_can_be_rolled_multiple_times(mocker):
-    # Mock random.randint to always return 4
     mock_randint = mocker.patch("random.randint", side_effect=[4, 6, 2])
     dice = Dice(6)
     total, rolls = dice.roll(times=3)
