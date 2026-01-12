@@ -73,3 +73,35 @@ def test_a_dice_with_modifier(mocked_roll, modifier, result, mocker):
     total, _ = dice.roll(modifier=modifier)
     assert total == result
     assert mock_randint.call_count == 1
+
+
+@pytest.mark.parametrize("mocked_rolls,rolls,modifier,result", [
+    [[2, 4, 18], 3, 0, 18],
+    [[1, 20, 11, 8, 7], 5, 0, 20],
+    [[14, 13, 6], 3, 1, 15],
+    [[2, 4, 18], 3, -1, 17]
+])
+def test_a_dice_should_be_rolled_n_times_and_the_best_roll_should_be_picked(mocked_rolls, rolls, modifier, result,
+                                                                            mocker):
+    # Mock random.randint to always return 4
+    mock_randint = mocker.patch("random.randint", side_effect=mocked_rolls)
+    dice = Dice(20)
+    higher_roll, rolls = dice.best_of(rolls=rolls, modifier=modifier)
+    assert higher_roll == result
+    assert rolls == mocked_rolls
+
+
+@pytest.mark.parametrize("mocked_rolls,rolls,modifier,result", [
+    [[2, 4, 18], 3, 0, 2],
+    [[1, 20, 11, 16, 2], 5, 0, 1],
+    [[14, 13, 6], 3, 1, 7],
+    [[14, 13, 6], 3, -1, 5],
+])
+def test_a_dice_should_be_rolled_n_times_and_the_worst_roll_should_be_picked(mocked_rolls, rolls, modifier, result,
+                                                                             mocker):
+    # Mock random.randint to always return 4
+    mock_randint = mocker.patch("random.randint", side_effect=mocked_rolls)
+    dice = Dice(20)
+    higher_roll, rolls = dice.worst_of(rolls=rolls, modifier=modifier)
+    assert higher_roll == result
+    assert rolls == mocked_rolls
