@@ -58,13 +58,7 @@ class Dice:
             return second, second_rolls
 
     def best_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
-        self._validate_int(rolls, "number of times")
-        self._validate_int(modifier, "value of modifier")
-        results = []
-        for _ in range(rolls):
-            roll = random.randint(1, self._faces)
-            logger.debug("Best-of roll: faces=%s result=%s", self._faces, roll)
-            results.append(roll)
+        _, results = self.roll(times=rolls, modifier=modifier)
 
         higher_roll = max(results) + modifier
         if higher_roll < 1:
@@ -79,13 +73,7 @@ class Dice:
         return higher_roll, results
 
     def worst_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
-        self._validate_int(rolls, "Number of times")
-        self._validate_int(modifier, "Modifier")
-        results = []
-        for _ in range(rolls):
-            roll = random.randint(1, self._faces)
-            logger.debug("Worst-of roll: faces=%s result=%s", self._faces, roll)
-            results.append(roll)
+        _, results = self.roll(times=rolls, modifier=modifier)
 
         lower_roll = min(results) + modifier
         if lower_roll < 1:
