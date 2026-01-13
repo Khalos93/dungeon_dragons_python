@@ -72,9 +72,13 @@ class Dice:
         return lower_roll, results
 
     def roll_with_advantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        logger.debug("Rolling with advantage: modifier=%s", modifier)
+
         highest_roll, roll_results = self.best_of(rolls=2, modifier=modifier)
         return highest_roll, roll_results
 
     def roll_with_disadvantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        logger.debug("Rolling with disadvantage: modifier=%s", modifier)
+
         lowest_roll, roll_results = self.worst_of(rolls=2, modifier=modifier)
         return lowest_roll, roll_results
