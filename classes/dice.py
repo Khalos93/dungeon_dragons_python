@@ -41,23 +41,7 @@ class Dice:
             total = 1
         return total, rolls
 
-    def roll_with_advantage(self) -> tuple[int, list[int]]:
-        first, first_rolls = self.roll()
-        second, second_rolls = self.roll()
-        if first > second:
-            return first, first_rolls
-        else:
-            return second, second_rolls
-
-    def roll_with_disadvantage(self) -> tuple[int, list[int]]:
-        first, first_rolls = self.roll()
-        second, second_rolls = self.roll()
-        if first < second:
-            return first, first_rolls
-        else:
-            return second, second_rolls
-
-    def best_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
+    def best_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
         _, results = self.roll(times=rolls, modifier=modifier)
 
         higher_roll = max(results) + modifier
@@ -72,7 +56,7 @@ class Dice:
         )
         return higher_roll, results
 
-    def worst_of(self, rolls: int, modifier: int) -> tuple[int, list[int]]:
+    def worst_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
         _, results = self.roll(times=rolls, modifier=modifier)
 
         lower_roll = min(results) + modifier
@@ -86,3 +70,11 @@ class Dice:
             lower_roll,
         )
         return lower_roll, results
+
+    def roll_with_advantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        highest_roll, roll_results = self.best_of(rolls=2, modifier=modifier)
+        return highest_roll, roll_results
+
+    def roll_with_disadvantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        lowest_roll, roll_results = self.worst_of(rolls=2, modifier=modifier)
+        return lowest_roll, roll_results
