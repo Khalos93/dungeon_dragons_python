@@ -18,7 +18,8 @@ class Dice:
         self._faces = faces
         logger.debug("Dice created with %s faces", self._faces)
 
-    def _validate_int(self, value, name):
+    @staticmethod
+    def _validate_int(value, name):
         if isinstance(value, bool) or not isinstance(value, int):
             raise TypeError(f"{name} must be an integer, got {type(value).__name__}")
 
@@ -40,20 +41,20 @@ class Dice:
             total = 1
         return total, rolls
 
-    def roll_with_advantage(self) -> tuple[int, list[int]]:
-        first, first_rolls = self.roll()
-        second, second_rolls = self.roll()
-        if first > second:
-            return first, first_rolls
-        else:
-            return second, second_rolls
+    def best_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
+        _, results = self.roll(times=rolls, modifier=modifier)
+        higher_roll = max(results) + modifier
+        return higher_roll, results
 
-    def roll_with_disadvantage(self) -> tuple[int, list[int]]:
-        first, first_rolls = self.roll()
-        second, second_rolls = self.roll()
-        if first < second:
-            return first, first_rolls
-        else:
-            return second, second_rolls
+    def worst_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
+        _, results = self.roll(times=rolls, modifier=modifier)
+        lower_roll = min(results) + modifier
+        return lower_roll, results
 
+    def roll_with_advantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        highest_roll, roll_results = self.best_of(rolls=2, modifier=modifier)
+        return highest_roll, roll_results
 
+    def roll_with_disadvantage(self, modifier: int = 0) -> tuple[int, list[int]]:
+        lowest_roll, roll_results = self.worst_of(rolls=2, modifier=modifier)
+        return lowest_roll, roll_results
