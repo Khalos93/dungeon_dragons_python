@@ -43,13 +43,11 @@ class Dice:
 
     def best_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
         _, results = self.roll(times=rolls, modifier=modifier)
-
         higher_roll = max(results) + modifier
         return higher_roll, results
 
     def worst_of(self, rolls: int = 2, modifier: int = 0) -> tuple[int, list[int]]:
         _, results = self.roll(times=rolls, modifier=modifier)
-
         lower_roll = min(results) + modifier
         return lower_roll, results
 
